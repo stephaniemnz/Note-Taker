@@ -10,11 +10,16 @@ Note Taker is an application built on Express.js, designed for users to write an
 - cd Note-Taker
 3. Install Dependencies
 - npm i
+- ![alt text](image.png)
 
 # Usage
-To use the application, start the server iin terminal:
+To use the application, start the server in terminal:
 - node server.js
 - got to http://localhost:3000 to access the Note Taker application.
+- ![alt text](image-1.png)
+
+- ![alt text](image-2.png)
 
 # Contact
 Github: https://github.com/stephaniemnz
+
