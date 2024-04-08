@@ -1,40 +1,62 @@
 const express = require('express');
+const fs = require('fs'); 
 const path = require('path');  
 const app = express();
-const fs = require('fs');   
 const PORT = process.env.PORT || 3000;
-const api = require('./routes/api');
-const notespad = require('./db/db.json');        
 
-// Serve static files from the 'public' folder
+const notes = require('./db/db.json');  
+
+//Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// GET /notes - Return the notes.html file
-app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/notes.html'));
+/// GET Route for homepage
+app.get('/', (req, res) =>
+res.sendFile(path.join(__dirname, '/public/index.html'))
+);
+
+// GET Route for Notes page
+app.get('/notes', (req, res) =>
+res.sendFile(path.join(__dirname, '/public/notes.html'))
+);
+
+// GET request for existing notes
+app.get('/api/notes', (req, res) => {
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Error reading notes data." });
+        }
+        res.json(JSON.parse(data));
+    });
 });
 
-// GET * - Return the index.html file for any other route
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/index.html'));
-});
+// POST request to add a new note
+const { v4: uuidv4 } = require('uuid'); 
 
-
-// POST /api/notes - Add a new note to db.json
 app.post('/api/notes', (req, res) => {
-    const newNote = req.body;
-    const data = readDBFile();
-    newNote.id = data.notes[data.notes.length - 1].id + 1; // Simple ID assignment
-    data.notes.push(newNote);
-    fs.writeFileSync(path.join(__dirname, 'db.json'), JSON.stringify(data, null, 2), 'utf8');
-    res.status(201).json(newNote);
-  });
+    const newNote = { ...req.body, id: uuidv4() }; // Assigns a unique ID to the new note
 
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Error reading notes data." });
+        }
+        const notes = JSON.parse(data);
+        notes.push(newNote);
 
+        fs.writeFile('./db/db.json', JSON.stringify(notes, null, 2), err => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Error saving new note." });
+            }
+            res.json(newNote);
+        });
+    });
+});
 
-
-
-// GET /api/notes - Read the db.json file and return all saved notes as JSON
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+// Start the server on the port
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
 });

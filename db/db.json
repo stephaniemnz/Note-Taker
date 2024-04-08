@@ -1,6 +1,26 @@
 [
-    {
-        "title":"Test Title",
-        "text":"Test text"
-    }
+  {
+    "title": "Test Title",
+    "text": "Test text"
+  },
+  {
+    "title": "Dishes",
+    "text": "Wash before guest arrive",
+    "id": "b8f0ab82-9288-4d3a-8219-d01c3434cf7b"
+  },
+  {
+    "title": "Gym",
+    "text": "Leg Day\n",
+    "id": "b287f813-bcf6-4fda-8b03-a346acde360e"
+  },
+  {
+    "title": "Internet",
+    "text": "Call MetroNet",
+    "id": "e157bf0e-c220-4894-9fee-061554e15c1a"
+  },
+  {
+    "title": "IBSM",
+    "text": "Class on Thursday",
+    "id": "4d11c335-d5f6-4fc5-a03a-02dc7dcd4940"
+  }
 ]
